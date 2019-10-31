@@ -1,0 +1,92 @@
+# 这是一个注释
+apiVersion: extensions/v1beta1
+# 这是一个注释
+kind: Deployment
+# 这是一个注释
+metadata:
+
+  namespace: uat
+
+  name: game-test
+
+  labels:
+
+    app: game-test
+# 这是一个注释
+spec:
+
+  replicas: 1
+
+  selector:
+
+    matchLabels:
+
+      app: game-test
+
+  template:
+
+    metadata:
+
+      labels:
+
+        app: game-test
+
+    spec:
+
+      containers:
+
+      - name: game-test
+
+        image: 192.168.1.5:5000/test/game-test:v1
+
+        resources:
+
+          limits:
+
+            cpu: 1000m
+
+            memory: 3000Mi
+
+          requests:
+
+            cpu: 500m
+
+            memory: 1024Mi
+
+        volumeMounts:
+
+        - name: logs
+
+          mountPath: /data/service/game-test/project/logs
+
+        ports:
+
+        - containerPort: 3008
+
+        readinessProbe:
+
+          tcpSocket:
+
+            port: 3008
+
+          initialDelaySeconds: 15
+
+          periodSeconds: 15
+
+        livenessProbe:
+
+          tcpSocket:
+
+            port: 3008
+
+          initialDelaySeconds: 20
+
+          periodSeconds: 20
+
+      volumes:
+
+      - name: logs
+
+        hostPath:
+
+          path: /tmp/logs
